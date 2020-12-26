@@ -10,6 +10,8 @@ import { Home } from "./src/Home";
 import { Submit } from "./src/Submit";
 import { Details } from "./src/Details";
 
+import { ResolvedProvider } from "./src/contexts/ResolvedContext";
+
 const Stack = createStackNavigator();
 
 const AppStack = () => (
@@ -22,6 +24,8 @@ const AppStack = () => (
 
 export const App = () => (
   <NavigationContainer>
-    <AppStack />
+    <ResolvedProvider>
+      <AppStack />
+    </ResolvedProvider>
   </NavigationContainer>
 );
