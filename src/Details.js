@@ -3,7 +3,7 @@
  */
 
 import React from "react";
-import { Button, StyleSheet, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 
 import { useResolved } from "./hooks/useResolved";
 
@@ -22,12 +22,12 @@ const details = [
   ["Resolved number", "id"],
   ["Formatted number", "formatted"],
   ["Country", "country"],
-  ["Date", "date"],
+  ["Submitted", "date"],
 ];
 
-function renderDetail([label, key]) {
+function renderDetail([label, key], index) {
   return (
-    <View style={style.detail}>
+    <View key={index} style={style.detail}>
       <Text>{label}</Text>
       <Text>{this[key]}</Text>
     </View>
