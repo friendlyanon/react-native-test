@@ -36,7 +36,7 @@ function renderDetail([label, key], index) {
 
 export const Details = ({ navigation, route }) => {
   const { id } = route.params;
-  const { resolved } = useResolved();
+  const { resolved, remove } = useResolved();
   const item = resolved.find((o) => o.id === id);
 
   return (
@@ -45,6 +45,7 @@ export const Details = ({ navigation, route }) => {
         <Flag code={item.countryCode} size={64} type="shiny" />
       </View>
       {details.map(renderDetail, item)}
+      <Button color="#EE675C" title="Remove" onPress={() => remove(id)} />
     </View>
   );
 };
