@@ -30,7 +30,10 @@ export const Home = ({ navigation }) => {
 
   const list = resolved.length === 0
     ? (<Placeholder />)
-    : (<FlatList data={resolved} renderItem={makeRenderer(navigation)} />);
+    : (<FlatList
+        data={[...resolved].reverse()}
+        renderItem={makeRenderer(navigation)}
+      />);
 
   return (
     <View style={style.list}>
