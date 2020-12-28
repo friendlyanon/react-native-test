@@ -3,13 +3,24 @@
  */
 
 import React from "react";
-import { StyleSheet, Pressable, Text } from "react-native";
+import { StyleSheet, Pressable, Text, View } from "react-native";
+
+import { Flag } from "./Flag";
 
 const style = StyleSheet.create({
   wrapper: {
     flexDirection: "column",
+    padding: 15,
+    borderBottomColor: "gray",
+    borderBottomWidth: 1,
+  },
+  top: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 3,
   },
   formatted: {
+    flex: 1,
     color: "black",
   },
   date: {
@@ -22,7 +33,10 @@ export const ListItem = ({ item, navigation }) => (
     style={style.wrapper}
     onPress={() => navigation.navigate("Details", { id: item.id })}
   >
-    <Text style={style.formatted}>{item.formatted}</Text>
+    <View style={style.top}>
+      <Text style={style.formatted}>{item.formatted}</Text>
+      <Flag code={item.countryCode} size={24} />
+    </View>
     <Text style={style.date}>{item.date}</Text>
   </Pressable>
 );
