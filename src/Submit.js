@@ -21,12 +21,18 @@ import { NumberInput } from "./component/NumberInput";
 const style = StyleSheet.create({
   wrapper: {
     flex: 1,
+    flexDirection: "column",
+    padding: 20,
   },
   label: {},
-  input: {},
-  button: {},
-  loader: {},
-  errorBox: {},
+  input: {
+    marginBottom: 10,
+  },
+  errorBox: {
+    padding: 10,
+    marginTop: 10,
+    backgroundColor: "rgba(240, 150, 150, 0.8)",
+  },
 });
 
 const urlPrefix =
