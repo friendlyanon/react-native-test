@@ -150,7 +150,7 @@ export const Submit = ({ navigation }) => {
     ? (<Button title="Cancel" onPress={() => controller.abort()} />)
     : (<Button title="Submit" disabled={number === ""} onPress={onSubmit} />);
   const loader = isLoading
-    ? (<ActivityIndicator style={style.loading} size="large" />)
+    ? (<ActivityIndicator style={style.loading} size="large" color="blue" />)
     : null;
 
   return (

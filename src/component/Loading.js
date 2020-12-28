@@ -15,6 +15,6 @@ const style = StyleSheet.create({
 
 export const Loading = () => (
   <View style={style.loading}>
-    <ActivityIndicator size="large" />
+    <ActivityIndicator size="large" color="blue" />
   </View>
 );
