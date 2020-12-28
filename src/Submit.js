@@ -14,6 +14,7 @@ import {
 
 import { useResolved } from "./hooks/useResolved";
 import { formattedDate } from "./utils/formattedDate";
+import { apiKey } from "./utils/apiKey";
 
 import { NumberInput } from "./component/NumberInput";
 
@@ -28,8 +29,9 @@ const style = StyleSheet.create({
   errorBox: {},
 });
 
-const url = "https://numvalidate.com/api/validate";
-// https://numvalidate.com/numvalidate-docs/index.html#errors
+const urlPrefix =
+  `http://apilayer.net/api/validate?access_key=${apiKey}&number=`;
+// https://numverify.com/documentation
 const errorMap = new Map([
   [400, "HTTP error (400)"],
   [401, "HTTP error (401)"],
@@ -42,27 +44,29 @@ const errorMap = new Map([
 ]);
 
 class InvalidError extends Error {
-  constructor(...args) {
-    super(...args);
-    this.name = "InvalidError";
-  }
+  name = "InvalidError";
 }
 
-const submit = async (number, controller) => {
-  const { data } = await ky.get(url, {
-    searchParams: { number },
-    signal: controller.signal,
-  }).json();
+class APIError extends Error {
+  name = "APIError";
+}
+
+const submit = async (number, { signal }) => {
+  const data = await ky.get(urlPrefix + number, { signal }).json();
+
   if (data.valid !== true) {
     throw new InvalidError();
   }
 
-  // https://numvalidate.com/numvalidate-docs/index.html#validation
+  if (data.success === false) {
+    throw new APIError(data.error.info);
+  }
+
   return {
-    id: data.e164format,
-    formatted: data.internationalFormat,
-    country: data.countryName,
-    countryCode: data.countryCode,
+    id: data.number,
+    formatted: data.international_format,
+    country: data.country_name,
+    countryCode: data.country_code,
     input: number,
     date: formattedDate(),
   };
@@ -77,6 +81,11 @@ const handleError = (setLoading, setError, setController, error) => {
 
   if (error.name === "InvalidError") {
     setError("Invalid number.");
+    return;
+  }
+
+  if (error.name === "APIError") {
+    setError(error.message);
     return;
   }
 
