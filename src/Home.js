@@ -18,7 +18,8 @@ const style = StyleSheet.create({
   },
 });
 
-const renderItem = (item) => (<ListItem item={item} />);
+const makeRenderer = (navigation) =>
+  ({ item }) => (<ListItem item={item} navigation={navigation} />);
 
 export const Home = ({ navigation }) => {
   const { resolved, isLoaded } = useResolved();
@@ -29,7 +30,7 @@ export const Home = ({ navigation }) => {
 
   const list = resolved.length === 0
     ? (<Placeholder />)
-    : (<FlatList data={resolved} renderItem={renderItem} />);
+    : (<FlatList data={resolved} renderItem={makeRenderer(navigation)} />);
 
   return (
     <View style={style.list}>
