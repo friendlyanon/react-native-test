@@ -16,7 +16,7 @@ import { useResolved } from "./hooks/useResolved";
 import { formattedDate } from "./utils/formattedDate";
 import { apiKey } from "./utils/apiKey";
 
-import { NumberInput } from "./component/NumberInput";
+import { SubmitInput } from "./component/SubmitInput";
 
 const style = StyleSheet.create({
   wrapper: {
@@ -27,6 +27,9 @@ const style = StyleSheet.create({
   label: {},
   input: {
     marginBottom: 10,
+  },
+  loading: {
+    marginTop: 10,
   },
   errorBox: {
     padding: 10,
@@ -146,24 +149,22 @@ export const Submit = ({ navigation }) => {
   const button = isLoading
     ? (<Button title="Cancel" onPress={() => controller.abort()} />)
     : (<Button title="Submit" disabled={number === ""} onPress={onSubmit} />);
+  const loader = isLoading
+    ? (<ActivityIndicator style={style.loading} size="large" />)
+    : null;
 
   return (
     <View style={style.wrapper}>
       <Text style={style.label}>Phone number:</Text>
-      <NumberInput
-        autoCorrect={false}
-        autoFocus={true}
+      <SubmitInput
         editable={!isLoading}
-        keyboardType="phone-pad"
         onChangeText={setNumber}
         onSubmitEditing={onSubmit}
-        placeholder="Enter a phone number"
         style={style.input}
-        returnKeyType="send"
         value={number}
       />
       {button}
-      {isLoading ? (<ActivityIndicator size="large" />) : null}
+      {loader}
       {error ? (<ErrorBox error={error} />) : null}
     </View>
   );
