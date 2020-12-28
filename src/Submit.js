@@ -113,12 +113,17 @@ const ErrorBox = ({ error }) => (
 );
 
 export const Submit = ({ navigation }) => {
-  const { add } = useResolved();
+  const { resolved, add } = useResolved();
   const [error, setError] = useState("");
   const [number, setNumber] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [controller, setController] = useState(new AbortController());
   const onSubmit = () => {
+    if (resolved.some((o) => o.input === number)) {
+      setError("This number has already been submitted.");
+      return;
+    }
+
     setLoading(true);
     setError("");
     submit(number, controller)
@@ -134,7 +139,7 @@ export const Submit = ({ navigation }) => {
 
   const button = isLoading
     ? (<Button title="Cancel" onPress={() => controller.abort()} />)
-    : (<Button title="Submit" onPress={onSubmit} />);
+    : (<Button title="Submit" disabled={number === ""} onPress={onSubmit} />);
 
   return (
     <View style={style.wrapper}>
