@@ -24,7 +24,6 @@ const style = StyleSheet.create({
     flexDirection: "column",
     padding: 20,
   },
-  label: {},
   input: {
     marginBottom: 10,
   },
@@ -155,14 +154,15 @@ export const Submit = ({ navigation }) => {
 
   return (
     <View style={style.wrapper}>
-      <Text style={style.label}>Phone number:</Text>
-      <SubmitInput
-        editable={!isLoading}
-        onChangeText={setNumber}
-        onSubmitEditing={onSubmit}
-        style={style.input}
-        value={number}
-      />
+      <View style={style.input}>
+        <SubmitInput
+          label="Phone number"
+          editable={!isLoading}
+          onChangeText={setNumber}
+          onSubmitEditing={onSubmit}
+          value={number}
+        />
+      </View>
       {button}
       {loader}
       {error ? (<ErrorBox error={error} />) : null}

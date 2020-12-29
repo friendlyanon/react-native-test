@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from "react";
-import { TextInput } from "react-native";
+import { TextField } from "@ubaids/react-native-material-textfield";
 
 const regex = /\D/g;
 const format = (text) => text.replace(regex, "");
@@ -11,14 +11,14 @@ const format = (text) => text.replace(regex, "");
 export const NumberInput = ({ value = "", onChangeText, ...props }) => {
   const [number, setNumber] = useState(value);
   const callback = (text) => {
-    const formatted = format(text);
-    setNumber(formatted);
-    onChangeText?.(formatted);
+    setNumber(text);
+    onChangeText?.(text);
   };
 
   return (
-    <TextInput
-      value={format(number)}
+    <TextField
+      formatText={format}
+      value={number}
       onChangeText={callback}
       {...props}
     />
