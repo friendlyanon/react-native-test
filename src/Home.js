@@ -2,8 +2,15 @@
  * @format
  */
 
-import React from "react";
-import { Button, FlatList, StyleSheet, View } from "react-native";
+import React, { useLayoutEffect } from "react";
+import {
+  Button,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 import { useResolved } from "./hooks/useResolved";
 
@@ -16,13 +23,44 @@ const style = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
   },
+  submit: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    margin: 5,
+    marginRight: 10,
+    borderRadius: 5,
+    backgroundColor: "#2296F3",
+  },
+  submitText: {
+    fontSize: 18,
+    color: "white",
+  },
 });
 
 const makeRenderer = (navigation) =>
   ({ item }) => (<ListItem item={item} navigation={navigation} />);
 
+const Submit = ({ onPress }) => (
+  <Pressable
+    style={style.submit}
+    onPress={onPress}
+  >
+    <Text style={style.submitText}>Submit</Text>
+  </Pressable>
+);
+
 export const Home = ({ navigation }) => {
   const { resolved, isLoaded } = useResolved();
+
+  useLayoutEffect(() => {
+    const button = isLoaded
+      ? (<Submit onPress={() => navigation.navigate("Submit")} />)
+      : null;
+
+    navigation.setOptions({ headerRight: () => button });
+  }, [navigation, isLoaded]);
 
   if (!isLoaded) {
     return (<Loading />);
@@ -37,7 +75,6 @@ export const Home = ({ navigation }) => {
 
   return (
     <View style={style.list}>
-      <Button title="Submit" onPress={() => navigation.navigate("Submit")} />
       {list}
     </View>
   );
