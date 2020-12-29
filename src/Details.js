@@ -63,9 +63,16 @@ export const Details = ({ navigation, route }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (<Remove onPress={() => remove(id)} />),
+      headerRight: () => (<Remove onPress={() => {
+        remove(id);
+        navigation.navigate("Home");
+      }} />),
     });
-  }, [navigation]);
+  }, [navigation, id]);
+
+  if (item == null) {
+    return null;
+  }
 
   return (
     <View style={style.wrapper}>
