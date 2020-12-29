@@ -4,6 +4,8 @@
 
 import React, { useLayoutEffect } from "react";
 import { Button, Pressable, StyleSheet, Text, View } from "react-native";
+import Clipboard from "@react-native-community/clipboard";
+import Toast from "react-native-simple-toast";
 
 import { useResolved } from "./hooks/useResolved";
 
@@ -13,14 +15,30 @@ const style = StyleSheet.create({
   wrapper: {
     flexDirection: "column",
   },
-  icon: {},
-  detail: {},
+  icon: {
+    padding: 30,
+    alignItems: "center",
+  },
+  detail: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    flexDirection: "row",
+    borderTopWidth: 1,
+    borderTopColor: "gray",
+  },
+  label: {
+    flex: 1,
+    fontWeight: "bold",
+  },
   remove: {
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 10,
     paddingRight: 10,
     margin: 5,
+    marginRight: 10,
     borderRadius: 5,
     backgroundColor: "#EE675C",
   },
@@ -28,21 +46,43 @@ const style = StyleSheet.create({
     fontSize: 18,
     color: "white",
   },
+  borderBottom: {
+    borderBottomWidth: 1,
+    borderBottomColor: "gray",
+  },
 });
 
+function copy(detail) {
+  try {
+    Clipboard.setString(detail);
+    Toast.show("Copied to clipboard");
+  } catch {
+    Toast.show("Failed to copy to clipboard");
+  }
+}
+
 const details = [
-  ["Input number", "input"],
-  ["Resolved number", "id"],
-  ["Formatted number", "formatted"],
-  ["Country", "country"],
-  ["Submitted", "date"],
+  ["Input number", "input", true],
+  ["Resolved number", "id", true],
+  ["Formatted number", "formatted", true],
+  ["Country", "country", false],
+  ["Submitted", "date", false],
 ];
 
-function renderDetail([label, key], index) {
+function renderDetail([label, key, isCopyable], index, array) {
+  const detail = this[key];
+  const detailText = (<Text>{detail}</Text>);
+  const wrappedText = isCopyable
+    ? (<Pressable onPress={() => copy(detail)}>{detailText}</Pressable>)
+    : detailText;
+  const detailStyle = index + 1 === array.length
+    ? [style.detail, style.borderBottom]
+    : style.detail;
+
   return (
-    <View key={index} style={style.detail}>
-      <Text>{label}</Text>
-      <Text>{this[key]}</Text>
+    <View key={index} style={detailStyle}>
+      <Text style={style.label}>{label}</Text>
+      {wrappedText}
     </View>
   );
 }
