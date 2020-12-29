@@ -2,8 +2,8 @@
  * @format
  */
 
-import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import React, { useLayoutEffect } from "react";
+import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useResolved } from "./hooks/useResolved";
 
@@ -15,6 +15,19 @@ const style = StyleSheet.create({
   },
   icon: {},
   detail: {},
+  remove: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    margin: 5,
+    borderRadius: 5,
+    backgroundColor: "#EE675C",
+  },
+  removeText: {
+    fontSize: 18,
+    color: "white",
+  },
 });
 
 const details = [
@@ -34,10 +47,25 @@ function renderDetail([label, key], index) {
   );
 }
 
+const Remove = ({ onPress }) => (
+  <Pressable
+    style={style.remove}
+    onPress={onPress}
+  >
+    <Text style={style.removeText}>Remove</Text>
+  </Pressable>
+);
+
 export const Details = ({ navigation, route }) => {
   const { id } = route.params;
   const { resolved, remove } = useResolved();
   const item = resolved.find((o) => o.id === id);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (<Remove onPress={() => remove(id)} />),
+    });
+  }, [navigation]);
 
   return (
     <View style={style.wrapper}>
@@ -45,7 +73,6 @@ export const Details = ({ navigation, route }) => {
         <Flag code={item.countryCode} size={64} type="shiny" />
       </View>
       {details.map(renderDetail, item)}
-      <Button color="#EE675C" title="Remove" onPress={() => remove(id)} />
     </View>
   );
 };
