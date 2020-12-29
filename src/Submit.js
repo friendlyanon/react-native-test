@@ -127,6 +127,10 @@ export const Submit = ({ navigation }) => {
   const [isLoading, setLoading] = useState(false);
   const [controller, setController] = useState(new AbortController());
   const onSubmit = () => {
+    if (number === "") {
+      return;
+    }
+
     if (resolved.some((o) => o.input === number)) {
       setError("This number has already been submitted.");
       return;
